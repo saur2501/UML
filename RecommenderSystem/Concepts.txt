@@ -1,1 +1,354 @@
- 
+you are my tutor - i want you to help me prepare for written exam and interview. Make a plan of a set of categories in descending order of priority. Then for each categories, give a quick high level read. after that start asking me evaluation questions - check my answers - if I give wrong answer, correct me with right understanding and if I am right, help me with expanded understanding and when you think I am ready move me towards next section or category. That way nudge me towards better readiness for the JD. feel free to adopt a different strategy for preparation but keep me informed about it. time is less and I want to prepare as fast as possible. So, apply 20-80 rule for readiness.
+
+# Rapid Prep Plan for eBay ML Engineer (Recsys) — 80/20 Focus
+
+Below is a prioritized roadmap, a quick high-level read for each category, and then we’ll start with targeted evaluation questions. We’ll move fast, correct misconceptions immediately, and deepen only where it yields outsized gains for this JD.
+
+## Priority Order (highest to lowest)
+
+1) Production Recommender Systems Design (retrieval → ranking → re-ranking; latency/SLOs; A/B)
+2) Deep Learning Retrieval + Vector Search (two-tower, embeddings, ANN)
+3) Ranking & Objectives (features, LTR, multi-objective: CTR/CVR/GMV/Ads)
+4) Data/Infra & MLOps at Scale (batch + streaming, features, monitoring, rollout)
+5) GCP Vertex AI & Vector Search (how to map the system onto GCP)
+6) LLMs/RAG for Recommendations (fusion with behavioral models, costs/latency, eval)
+7) Big Data + NoSQL/Redis Patterns (Spark/Hadoop, Airflow/Dataflow, cache design)
+8) System Metrics, Experimentation & Guardrails (stats rigor, guardrails, failure modes)
+9) Behavioral Interview & Story Playbook (impact narratives, tradeoffs, failures)
+
+I’ll start at the top and only drill deeper as needed. If answers are solid, I’ll accelerate to the next section.
+
+***
+
+## (1) Production Recommender Systems Design — Quick Read
+- Goal: deliver relevant candidates fast, then rank precisely under strict latency and availability SLOs.
+- Typical flow: logs → offline training (embeddings, rankers) → online retrieval (ANN) → feature assembly (feature store/Redis) → ranking → re-ranking/diversity/business rules → response within p99 budget (e.g., 150–250 ms end-to-end).
+- Cold start: popularity/semantic/neighborhood bootstraps, metadata embeddings, seller/item-side priors.
+- Real-time signals: recency of user actions, session context, query intent.
+- Evaluation: offline (AUC/NDCG/Recall@K), online (A/B with CTR, CVR, GMV, RPM, guardrails: latency, bounce, complaints).
+- Reliability: fallbacks if ANN or feature service slows; degrade gracefully.
+
+Evaluation — Section 1
+Q1. Outline an e-commerce recommender’s end-to-end serving path from user request to response under a 200 ms p99 budget. Include retrieval source(s), feature assembly, ranking, and fallbacks.
+
+Q2. Name two cold-start tactics for new items and two for new users that don’t rely on historical clicks.
+
+Q3. What offline metrics would you use to validate retrieval and ranking before an A/B? Which online KPIs and guardrails would you track?
+
+Please answer Q1–Q3 succinctly. I’ll review and either correct or extend, then move you forward.
+----------------
+
+Here's a breakdown of the key concepts in production recommender system design:
+
+1. System Architecture Flow
+Logs → Offline Training: User interaction data is collected and used to train models (e.g., embeddings for items/users, ranking models).
+Online Retrieval (ANN): Approximate Nearest Neighbor (ANN) search quickly retrieves candidate items from large catalogs (e.g., using FAISS, HNSW).
+Feature Assembly: Features (user history, item attributes, context) are fetched from low-latency stores (Redis, feature stores).
+Ranking → Re-ranking: Initial ranking by ML models, followed by business rules (diversity, freshness, constraints).
+2. Key Components
+Latency SLOs: Strict latency targets (e.g., 150–250 ms end-to-end) to ensure real-time responsiveness.
+Cold Start: Strategies for new users/items:
+Popularity/Semantic Bootstraps: Recommend trending items or use metadata (e.g., item titles/categories).
+Neighborhood Methods: Leverage similar users/items (e.g., collaborative filtering).
+Real-Time Signals: Incorporate:
+Recency: Weight recent user actions (clicks, searches) more heavily.
+Session Context: Current user activity (e.g., browsing category).
+Query Intent: Search terms or inferred goals.
+3. Evaluation
+Offline Metrics:
+AUC/NDCG: Measure ranking quality (AUC for binary relevance, NDCG for graded relevance).
+Recall@K: Percentage of relevant items retrieved in top-K candidates.
+Online Metrics (A/B Tests):
+CTR/CVR: Click-through and conversion rates.
+GMV/RPM: Gross merchandise volume/revenue per mille (business impact).
+Guardrails: Monitor latency, bounce rates, and user complaints.
+4. Reliability
+Fallbacks: If ANN/feature services slow down, use:
+Cached results: Stale but fast recommendations.
+Simpler models: Rule-based fallbacks (e.g., "popular near you").
+Graceful Degradation: Maintain service quality even during partial failures.
+5. **Example Workflow
+User Searches "Running Shoes":
+
+ANN retrieves 1,000 shoe candidates.
+Feature store fetches user preferences (e.g., brand affinity, size).
+Ranker scores candidates (e.g., using a DNN).
+Re-ranker applies diversity (mix of brands/price ranges).
+Top 10 results returned in <200 ms.
+New User Joins:
+
+Cold-start: Recommend popular running shoes + items based on signup metadata (location, age).
+Tools/Technologies
+ANN: FAISS, HNSW, ScaNN.
+Feature Stores: Feast, Tecton, Redis.
+Ranking: TensorFlow, PyTorch, XGBoost.
+Monitoring: Prometheus (latency), Kibana (logs).
+Key Trade-offs
+Latency vs. Recall: More candidates → better recall but slower.
+Freshness vs. Stability: Real-time signals improve relevance but may increase variance.
+This design balances speed, relevance, and reliability while allowing iterative improvement through offline/online evaluation.
+
+
+***
+
+## (2) Deep Learning Retrieval + Vector Search — Quick Read
+- Two-tower: user tower (behavioral sequence, demographics, context) and item tower (text/title, category, image, price). Train with contrastive losses (in-batch negatives, sampled softmax).
+- Embedding maintenance: frequent retrain; user embeddings may be real-time (session-based) or last-N actions; item embeddings updated on content changes.
+- ANN: HNSW/ScaNN/IVF-PQ; balance recall vs. latency; shard/partition by category or popularity; cache hot queries.
+- Blending: combine behavioral candidates (co-view/co-buy) with semantic/vector retrieval; dedup and prioritize.
+
+Evaluation — Section 2 (we’ll go here after Section 1)
+- Define training objective and negative sampling for a two-tower.
+- Tradeoffs between HNSW and IVF-PQ.
+- How to keep user embeddings fresh within 10–50 ms budget.
+
+----------------------------
+Here's a breakdown of the key concepts in the document about Deep Learning Retrieval + Vector Search:
+
+1. Two-Tower Model Architecture
+User Tower
+Inputs:
+Behavioral Sequence: Past clicks, purchases, searches.
+Demographics: Age, gender, location.
+Context: Time of day, device, session activity.
+Output: A dense vector (embedding) representing the user’s current interests.
+Item Tower
+Inputs:
+Text/Title: Product descriptions, titles.
+Category: Product taxonomy (e.g., "Electronics > Phones").
+Image: Visual features (using CNNs or ViTs).
+Price: Scalar value (normalized).
+Output: A dense vector representing the item’s features.
+Training
+Contrastive Losses:
+In-Batch Negatives: Treat other items in the same batch as negatives for a given user-item pair.
+Sampled Softmax: Efficiently sample negatives from the full item catalog.
+Goal: Ensure user and item embeddings are close in vector space if they are relevant (e.g., user clicked the item).
+2. Embedding Maintenance
+User Embeddings
+Real-Time (Session-Based): Update embeddings during a session (e.g., using RNNs/Transformers).
+Last-N Actions: Aggregate recent interactions (e.g., average of last 10 clicks).
+Challenge: Balance freshness (real-time updates) vs. stability (avoid noisy signals).
+Item Embeddings
+Update Triggers:
+Content changes (e.g., price drop, new description).
+Periodic retraining (e.g., daily/weekly).
+Cold Start: Use metadata (title, category) for new items before enough interactions exist.
+3. Approximate Nearest Neighbor (ANN) Search
+Algorithms
+HNSW (Hierarchical Navigable Small World): Fast and high recall, but higher memory usage.
+ScaNN (Scalable Nearest Neighbors): Optimized for GPU, good recall-latency trade-off.
+IVF-PQ (Inverted File with Product Quantization): Memory-efficient, partitions data into clusters.
+Optimizations
+Recall vs. Latency: More candidates → higher recall but slower retrieval.
+Sharding/Partitioning:
+By category (e.g., separate indices for "Electronics" and "Clothing").
+By popularity (e.g., hot items in a fast cache).
+Caching: Store results for frequent queries (e.g., "iPhone 15").
+4. Blending Retrieval Strategies
+Candidate Sources
+Behavioral Retrieval:
+Co-View/Co-Buy: "Users who viewed X also viewed Y."
+Collaborative Filtering: User-item interaction matrices.
+Semantic/Vector Retrieval: ANN search over embeddings.
+Post-Processing
+Deduplication: Remove near-identical items (e.g., same product in different colors).
+Prioritization:
+Business rules (e.g., boost high-margin items).
+Diversity (e.g., mix categories, price ranges).
+Key Trade-offs
+Aspect	Option A	Option B
+Freshness	Real-time user embeddings	Periodic updates
+Recall	More ANN candidates	Fewer candidates
+Latency	Faster (cached/popular)	Slower (full ANN)
+Cold Start	Metadata-based	Hybrid (metadata + similarity)
+Example Workflow
+User Searches "Running Shoes":
+
+User tower generates embedding from query + context.
+ANN retrieves 1,000 shoe candidates.
+Blending:
+600 from vector search (semantic matches).
+300 from co-view (behavioral).
+100 from popularity fallback.
+Dedup and re-rank (e.g., diversity, price).
+New Item "Yoga Mat":
+
+Item tower uses title/category to create embedding.
+Initially shown via metadata similarity until interactions accumulate.
+Tools/Libraries
+Embedding Training: TensorFlow/PyTorch (two-tower), HuggingFace (text).
+ANN: FAISS, ScaNN, HNSWLib.
+Real-Time: Redis (caching), Apache Kafka (streaming).
+This approach balances accuracy (via deep learning) and scalability (via ANN/search optimizations).
+
+
+***
+
+## (3) Ranking & Objectives — Quick Read
+- Ranker options: GBDT/LTR for speed, DNN/transformers for richer interactions; often hybrid.
+- Objectives: multi-task or multi-objective (CTR, CVR/GMV, Ads revenue, satisfaction signals).
+- Bias handling: position bias, exposure bias; calibration; counterfactual correction.
+- Constraints: diversity, novelty, seller fairness, ads blending.
+
+Evaluation — Section 3
+- Design a feature set for ranker; handle leakage, freshness.
+- Combine CTR and GMV into a single objective; control for ads.
+
+-----------------------------
+Here's a detailed breakdown of the key concepts in ranking systems for recommendation engines:
+
+1. Ranker Options
+GBDT/LTR (Gradient Boosted Decision Trees/Learning to Rank)
+Speed: Extremely fast inference (microseconds per prediction)
+Features: Handles structured features well (user history, item metadata)
+Implementation: Uses LambdaMART or pairwise ranking objectives
+Best for: First-stage ranking with thousands of candidates
+DNN/Transformers
+Rich Interactions: Models complex user-item relationships via attention
+Features: Handles unstructured data (text, images, sequences)
+Implementation: Two-tower architectures or cross-attention models
+Best for: Final ranking with hundreds of candidates
+Hybrid Approach
+python
+
+
+# Example hybrid ranking pipeline
+def rank_items(user, candidates):
+    # First stage: GBDT for fast filtering
+    gbdt_scores = gbdt_model.predict(user, candidates[:5000])
+    top_500 = sorted(zip(candidates, gbdt_scores), key=lambda x: -x[1])[:500]
+
+    # Second stage: DNN for precise ranking
+    dnn_inputs = prepare_cross_features(user, [c[0] for c in top_500])
+    dnn_scores = dnn_model.predict(dnn_inputs)
+
+    # Combine scores
+    final_scores = [0.7*dnn + 0.3*gbdt for dnn, (_, gbdt) in zip(dnn_scores, top_500)]
+    return sorted(zip([c[0] for c in top_500], final_scores), key=lambda x: -x[1])
+2. Multi-Objective Optimization
+Objective	Metric	Implementation
+CTR	Click-through rate	Binary cross-entropy
+CVR	Conversion rate	Two-tower with purchase signal
+GMV	Gross merchandise value	Regression on order value
+Satisfaction	Long-term engagement	Reward modeling with RL
+Multi-Task Learning Example:
+
+python
+
+
+class MultiTaskHead(nn.Module):
+    def __init__(self, hidden_size):
+        super().__init__()
+        self.ctr_head = nn.Linear(hidden_size, 1)
+        self.cvr_head = nn.Linear(hidden_size, 1)
+
+    def forward(self, x):
+        return torch.sigmoid(self.ctr_head(x)), torch.sigmoid(self.cvr_head(x))
+3. Bias Handling Techniques
+Position Bias
+Problem: Items in top positions get more clicks regardless of relevance
+Solution:
+python
+
+
+# Inverse propensity weighting
+def debias_clicks(clicks, position_probs):
+    return clicks / position_probs
+Exposure Bias
+Problem: Users only see a limited subset of items
+Solution:
+Explore-exploit strategies (ε-greedy, Thompson sampling)
+Bandit algorithms for online correction
+4. Constraint Implementation
+Diversity Enforcement
+python
+
+
+def diversify(results, category_map, max_per_cat=2):
+    diversified = []
+    cat_counts = defaultdict(int)
+
+    for item, score in results:
+        cat = category_map[item]
+        if cat_counts[cat] < max_per_cat:
+            diversified.append(item)
+            cat_counts[cat] += 1
+        if len(diversified) >= 10:
+            break
+    return diversified
+Fairness Constraints
+Seller Fairness:
+python
+
+
+def enforce_fairness(scores, seller_ids, alpha=0.3):
+    seller_scores = aggregate_by_seller(scores, seller_ids)
+    adjusted = [s * (1 + alpha*(1 - seller_scores[sid]))
+               for s, sid in zip(scores, seller_ids)]
+    return adjusted
+Key Trade-offs
+Aspect	Option A	Option B
+Accuracy	Complex DNN	Simple GBDT
+Latency	100ms	5ms
+Freshness	Near-real-time	Daily updates
+Fairness	Strict constraints	Optimized engagement
+Practical Implementation Flow
+Candidate Generation: Retrieve 10K items via vector search
+First-Stage Rank: GBDT reduces to 500 candidates (μs latency)
+Second-Stage Rank: DNN scores with cross-features (ms latency)
+Constraint Application: Enforce diversity/fairness rules
+Online Learning: Update models with real-time signals
+This architecture balances accuracy, latency, and business requirements while handling the complexities of modern recommendation systems.
+
+
+***
+
+## (4) Data/Infra & MLOps — Quick Read
+- Offline: Spark/Hadoop for training data; Airflow/Beam/Dataflow pipelines; backfills and schema evolution.
+- Online: feature store + Redis for low-latency reads; Kafka/Pub/Sub for streaming updates; canary/shadow deploys; autoscaling.
+- Monitoring: data/feature drift, model decay, latency, error budgets; rollback playbooks.
+
+***
+
+## (5) GCP Vertex AI & Vector Search — Quick Read
+- Use Vertex Pipelines for training; Vertex Endpoints for serving; BigQuery + Dataflow + Pub/Sub for data; Vertex Vector Search for ANN; Cloud Run/GKE for services; Cloud Monitoring for SLOs.
+- Secure, reproducible deployments; model/version management; blue/green.
+
+***
+
+## (6) LLMs/RAG for Recommendations — Quick Read
+- Use LLMs to: enrich item metadata, generate explanations/summaries, rerank small candidate sets, answer shopping intents; ground strictly on catalog.
+- Control: prompt templates, constrained decoding; retrieval grounding; budget via small K inputs and caching.
+- Evaluate: human + offline rerank metrics + online guardrails (latency/cost/safety).
+
+***
+
+## (7) Big Data + NoSQL/Redis — Quick Read
+- Spark for feature generation; Dataflow for streaming features; Redis for session features and hot items; Mongo/NoSQL for item/user profiles.
+- Consistency: offline/online parity; schema versioning; TTL strategies.
+
+***
+
+## (8) Metrics/Experimentation/Guardrails — Quick Read
+- Primary: CTR, CVR, GMV, Ads RPM; Secondary: long-term retention, diversity.
+- Experiment design: power analysis, pre-registration of metrics, ramp control; guardrails on latency, error rate, user complaints.
+
+***
+
+## (9) Behavioral Stories — Quick Read
+- Prepare 2–3 quantified stories: problem → constraints → solution → measurable impact → tradeoffs → learnings.
+- Include failure/rollback story with lessons learned.
+
+***
+
+How we’ll proceed
+- We’ll iterate category by category with rapid Q&A and immediate feedback.
+- If answers are strong, I’ll compress and move faster. If gaps appear, I’ll coach with formulas, patterns, and sample designs.
+
+Let’s begin.
+
+Answer Q1–Q3 for Section 1 now.
+
+Citations:
+[1] ebay_R0068366-Machine-Learning-Engineer.docx https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/90874791/a26e9222-4101-4119-855e-dca965d41209/ebay_R0068366-Machine-Learning-Engineer.docx
