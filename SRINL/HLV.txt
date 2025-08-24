@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SRINCS>
+    <Meta>
+    aka SRINCS
+        About - Samsung Research Institute on Network Cloud for SDN / VNF (load balancing, orchestration, SDN)
+        pronounced as Shrinks.
+        <SRIB>
+        Company - Samsung SRIB (Bangalore Branch of Samsung Research)
+            Narrative - Samsung into electronics products
+                Mostly centered around smartphones to start with but see how they expand.
+                Clustering them together reveals a pattern.
+            Types - ?Ordered logically (CS Domains hierarchy)
+                On Device AI etc.
+                    Voice Intelligence
+                    Visual intel
+                ?Data Mgmt - AD Plt and Big data
+                    Cloud services, Service reliability
+                    Big Data Analysis, Data intel
+                    Ads
+                ?ERP
+                    Tech Strategy - Security, IT infra, RnD.
+                    People Team
+                    ?Venture Investment.
+                SE
+                    SE Team - SDLC, Service Quality, adv SDE, etc.
+                    Svc platform team - Sellout PF, Digital life group (wallet, etc)
+                IOT
+                    SmartThings
+                ?Communications - Networks (beyond ue)
+                    Comm Services - different
+                    Modem - Amit Mannan (micro communication)
+                    Call OAM - Amit Mannan (macro communication)
+                    Beyond 5G
+            CEO / MD - Deepesh Shah
+            Project - PHI.
+        </SRIB>
+        <Team_Call_OAM>
+        Team - Network Call and OAM (Operations, Administration, and Maintenance)
+            In other words
+                runtime call handling (Control plane parts)
+                along with Admin CRUD (Mgmt Plane)
+            Narrative - Our team under Amit Mannan resp does e2e Network Call handling
+                at levels [UE,] RAN, EMS, Core, Cloud (VNF), etc is done.
+            Types
+                ?Systems - Individual Concrete Systems.
+                    ?OAM.
+                Call S/W Group (Core Design - Srinivasan Swaminathan group) - Control Plane runtimes.
+                Network Management (Karthikeyan) - Mgmt Plane and Design Time.
+            Team Lead - Amit Mannan.
+            Project - PHI.
+        </Team_Call_OAM>
+        <Group_MgmtSWAnalyticsGroup>
+        Group - Management S/W and Analytics Group
+            Narrative - Our group under Karthikeyan resp handles Network HLV
+                Management (VNF, EMS)
+                Analytics (DCM, VOMA)
+            Types - Logically organized (as CS domains)
+                Abstract - VNF
+                    All Network Functions are executed in cloud.
+                    Request comes to device - makes call to cloud function for next step decision making.
+                Analytics - DCM, VOMA, Research (CLA).
+                Network Components
+                    LSM (Mgmt HLV)
+                        And SSM
+                    CSM (Core or MME HLV so Mgmt)
+                    2G vRAN (SS EMS - RAN HLV so Mgmt)
+                Cloud Platform Team
+            Group Head - Karthikeyan.
+            Project - PHI.
+        </Group_MgmtSWAnalyticsGroup>
+        <Part_CloudPlatform_VNF>
+        Part - Cloud Platform (VNF)
+            Narrative - Our Part under Vivek Soni resp handles cloud for VNF
+                SDN -
+                    Control Layer centralized and Data Layer distributed across devices.
+                    Software Defined Network with CNLB.
+                        How - Centralized control plane and individual many data planes so where CNLB would fit - think innovative.
+                        Policies for CNLB operating at data plane can come from SDN sitting in control plane - sounds good.
+                        This means at present we have centralized system which can push configs and commands for individual devices or apps.
+                            Imagine, SDN pushing configs and shell files from SDN system on cloud - one command defining what the whole system should do - like updates, policies, etc.
+                    Central control for all devices based on commands (Transactional part).
+                        On-boarding devices with zero touch.
+                SCO - Samsung Cloud Orchestrator (FND Part)
+                    Centralized dashboard view of all cluster view across SRIB including CNLB.
+                        Tools like prometheus or REST APIs or direct Helm used to get status across all the clusters.
+                        Control lifecycle and overview of many clusters from a web interface (may seem like a website).
+                    Centralized monitoring and controlling all Cloud installations
+                        like CNLB installation from there.
+                    Forked, SMO Project - what is it about?
+                CNLB - Load Balancing (Interfacing Part)
+            Part Head - Vivek Soni
+            Project - [SRIB] SDN NFV Development Y2022
+        </Part_CloudPlatform_VNF>
+        <Subteam_Project_CNLB>
+        Sub-team (Project) - Load Balancer for SDN
+            Narrative - Our sub-team under Chandan resp handles cloud load-balancing.
+            RM - Chandan Swarup Patra, Sandeep Srivastava
+            Project - SRIB NW Access Call SW Development_2022
+        </Subteam_Project_CNLB>
+    </Meta>
+    <PeoplePerspective>
+        MD - Dipesh Shah (SRIB)
+            TL - Others - Ashish Kumar - 5G Services Team
+                TL - Ratnakar Rao Venkata Ray - Beyond 5G Team
+                TL - Yoonchang Kim - Biz Admin Team.
+                TL - CX or CTO - Mohan Rao Goli
+                TL - Network Modem (Amit Mannan), Dipesh Goli.
+                Visual Intelligence, Voice Intelligence,
+                Tech Strategy, Ondevice AI
+                Samsung Venture Investment, SE Team,
+                Service PF and Big Data Team
+                People Team, IOT Team.
+            TL - Amit Mannan (Network Call and OAM)
+                GH - Call S/W Group - Srinivas Swaminathan
+                GH - OAM S/W Group - Sudheer Kumar H U
+                GH - System S/W Group - Vishal Murgai
+                GH - Network Verification Group - Maddi Reddi Upendra
+                HR - Priyanka KV
+                GH - Karthikeyan (Management S/W and Analytics Group)
+                    PH - CP - Vivek Soni
+                        RM - Niswant - [SRIB] SDN NFV Development Y2022
+                            Ankit
+                            Ayush
+                        RM - Ganesh - Cloud Orchestration (SCO)
+                        RM - Chandan - CNLB.
+                    PH - NA - Varadarajan (Obsolete)
+                        Research (self)
+                        RM - Saravanan, etc - DCM, VOMA, etc
+                    PH - EMS, CSM, 2G vRAN - Nagendra Gundampadu - [SRIB] EMS-CSM and TAC3_2022, [SRIB] EMS-SSM_Y2022
+                        RM - LSM n SSM - Chittaranjan Sahoo - [SRIB] EMS-LSM and TAC3_2022
+                            Lalit
+                            Abhilash
+                            Mohan - pass
+                        RM - CSM - Muhammad Saheer Cheruvath - [SRIB] EMS-CSM and TAC3_2022
+                            Prakhar - [SRIB] EMS-CSM and TAC3_2022
+                            Arun - same
+                        RM - 2G vRAN - Alina - 2G EMS Development
+                            Alina, Mohan and lalit
+                        RM - Maddileti Kuruva (NFV TAC3)
+                    PH - ?Pratap Singh
+    </PeoplePerspective>
+    <CNLB>
+        <Business>
+            <BuPa>
+                <Customers>
+                    Persona - Any Telecom operator.
+                    SRINX - Customers - KDDI, Sasktel, Telus.
+                        deployed on private cloud environments for KDDI, Sasktel and NTTE.
+                    AWS Customers
+                        Videotron and Telus - CNLB 5G Core on AWS.
+                        //Telus going to commercially deploy CNLB along with 5G Core on AWS - first on public cloud.
+                    Others
+                        Japan - USM, Global - MUSIM.
+                        VMWare - Sasktel - IPSec.
+                        SKT, LGU.
+                </Customers>
+                <Suppliers>
+                    Envoy, and standard licenses which are commercially supported.
+                </Suppliers>
+                <TeamCareerGraph>
+                    GH - Karthikeyan Subramaniam
+                        M A Krishnaswamy Matriculation School
+                        Avadi, Tamil Nadu
+                        Alcatel 1 year
+                        Samsung 2000
+                    PH - Vivek Soni - Must be close to Uttarakhand.
+                        Gurukula Kangri Vishwavidyalaya, Haridwar.
+                        Future.
+                        Samsung Korea.
+                        Samsung India.
+                    RM - Chandan Swarup Patra - Orissa Cuttack.
+                        IIITB.
+                        Samsung 2008.
+                        Others
+                            Lucasz
+                    Team
+                        Saurabh - Super Awesome Guy.
+                        Rohan Shekhawat - UP Kanpur.
+                            IIIT Allahabad
+                            Mathworks intern.
+                            ML Intern, Quantiphi.
+                            Samsung team 2021.
+                        Rohit Shaw - WB Kolkata.
+                            Nokia Ericsson.
+                            Samsung.
+                        Sudhakar B
+                            Studied Anna University - most preferred in TN.
+                        Ekkagra Singh - Himachal Shimla
+                            NIT Hamirpur
+                            BARC Intern.
+                            Wipro Hydrabad for CISCO.
+                            Samsung Bengaluru.
+                </TeamCareerGraph>
+            </BuPa>
+            <Proposal>
+                Load balancer specifically designed for Telecom Data at Core (and eventually RAN)
+            </Proposal>
+            <Workspace>5th Floor</Workspace>
+        </Business>
+        <Specifications>
+            Bastion
+            oc login -u admin -p samsung
+            helm install using values.xml
+            LB Install and Backend pods install using service and deployment yaml manifest
+                (oc apply -f tcp.yaml)
+                HTTP, SCTP, TCP or UDP
+                L2 or L3
+                External cluster or local.
+                SNAP or not.
+            Test the traffic flow.
+        </Specifications>
+        <Design>
+            About - Dance of the dragons.
+            <LargerPicture>
+            Telecom
+                Data Plane - Actual work of moving data.
+                    It's the do part like worker bee.
+                    Like mailman who just rides on the road he is told.
+                    RAN DU - Distributed Unit - handles actual transmission of data - like the hands to move data.
+                    RAN UP - User plane - where the data traffic flows like highway.
+                Control Plane - decisions about how data should move.
+                    manager who makes decisions - like which streets mail carrier should take.
+                    RAN Control Unit - control the network and makes decisions about data like the brain.
+                    Involves Comprehensive decision making - so cnlb, sdn are more basic forms of it (with SCO as its management dashboard) - not detailed routing.
+                Management Plane - sets rules for control and data planes to work.
+                    Ensure smooth operation thru control and maintenance (different from data layers).
+                        Brain or control center of the telecom - think of it as "plan" part - boss to ensure eth runs smooth.
+                    FCAPS - Fault Configuration Analytics Performance Security
+                        Fault - Wire cut, server crash - detective finds out and fix it fast for no interruption.
+                        Config - Remote control the telecom (network setup, which signals go where and how strong).
+                        Analytics - Monitoring like a lifeguard.
+                        Performance - how well it's performing like bike speed - data speed, clarity of phone calls, delays.
+                        Security - Only authorized should get access.
+            SRINA - revisited arch understanding.
+                <DCM>
+                eNB to DCM to stitch.
+                    Stitched data with stats and alarms shown on dashboard now at OSS level but not original usecase.
+                        OSS (operations support systems) is a collection of hardware and software tools
+                            designed to help organisations monitor, analyse and manage telecom networks.
+                        st used mistaken with LSM or EMS
+                            EMS used for FCAPS (fault, configuration, accounting, performance and security) - these were my inputs for research.
+                            NMS = EMS + link/connectivity management of all devices+ FCAPS on network basis.
+                            Eg - An EMS would be able to give individual alarms on nodes.
+                                But NMS can correlate the alarms on different nodes;
+                                it can, thus find out root cause alarms when a service is disrupted.
+                        OSS (Operation Support Systems) takes a step further - managing multiple vendors across networks.
+                        OSS will interact with individual NMSs and provide one dashboard for FCAPS management.
+                    Original was DCM stitched data and LSM data taken by SON to find changes in throughput, etc
+                        and again informing LSM so that decision of the antenna tilt.
+                        Such a cool feature which they should have taken.
+                    Input Outputs
+                        Input sources - ports protocols, files, zookeeper (if different system for distribution of load), etc
+                        Flume Framework inside
+                        kafka output, file output, summary and alarms output.
+                    I got a feel for it by working on all the tools
+                        and making even my own scripts in python, java etc to parse, extract, stitch,
+                        and combine over flume arch of hybrid packets.
+                        eNB, gNB, MME, etc send these "analytical information" packets already for further insights.
+                </DCM>
+                <VOMA>
+                VoMA for video buffering was on streaming data for getting some analytical insights.
+                </VOMA>
+                <COA>
+                COA was 5 people team for some RnD on Cognizance over network
+                    maybe the seed for my research.
+                    Get data from LSM for reinforcement correction.
+                </COA>
+                <DMA>
+                DMA (Data Monitoring Analyzer) product was used to take data from LSM
+                    and utilize that for sth like for SON maybe.
+                </DMA>
+                <DataAndControlPlanes>
+                    Never met eNB team members but they are ew but different floors - MODEM, etc.
+                        Core team is also there - no MME but it's there.
+                    Data Layer teams spread across floors.
+                </DataAndControlPlanes>
+                <Platforms>
+                    Virtual Network Functions (VNFs) are virtualized network services running on open computing platforms
+                        formerly carried out by proprietary, dedicated hardware technology.
+                        Common VNFs include virtualized routers, firewalls, WAN optimization, and network address translation (NAT) services.
+                        CNF is taking these to Cloud - Functionality VMs (?microservices done by VNF) moved to cloud.
+                        Our teams plan was 3 microservices like computation microservice, writing microservice, etc which was a bad idea.
+                    Cloud Platform - all of the CNF => k8s obviously.
+                        SCO (aka CMS) - facade over all such systems.
+                        CNLB - the real deal to load-balance and forward packets to all the network servers made from hitherto hardware deployed servers.
+                        ?SDN - control layer consolidation in telecom network.
+                </Platforms>
+                <Mgmt>
+                Management tricks - give work to multiple vendors across geography.
+                    Telling nokia to use data of samsung and telling samsung to use data for nokia
+                    take the best among the 2.
+                </Mgmt>
+            SRINA - Relp - Full circle Nagendra timelines discussion
+                Nagendra full circle discussion where we also discussed before pandemic
+                    but after with different people - praised by previous colleagues.
+                Varada managing both EMS and Analytics 2014
+                    when samsung network significantly grew as tie up between jio and samsung for win win.
+                    Although small presence since 1990s.
+                    too much work so recruited Nagendra
+                    Handed over for analytics 2017 to 21 till June
+                    but Varada later wanted to work more on research so swapped with Nagendra for Analytics.
+                Analytics team shrunk from 45 members 4 teams to 1.1 teams with 10 members
+                    GT promoted by Nagendra to handle DCM and VoMA and sleepless nights to manage so needed help also.
+                    This means Varada had too much responsibilities
+                    and your responsibilities can always be scaled as per your situation if it gets too demanding
+                    but you always choose to work on a lot.
+                POC for SON to make antenna tilt but significantly
+                    samsung keeps trying that - finally they said that they were already using 7 else
+                    although even their own teams were helping to build it.
+                But position of advantage that many other telecom providers used our developed product.
+                So the larger ecosystem of networking in samsung under Amit Mannan became clear
+                    We are managing all layers - data layers, control layers (MME not much though), analytical or mgmt layers (very prominently).
+            </LargerPicture>
+            ......
