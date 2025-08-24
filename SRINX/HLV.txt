@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SRINX>
+    About - Crack the arch - 1 month program with 1 week each. Can have multiple iterations (like first quarter or 3 rounds)
+        1st round cursory look.
+        2nd round take full responsibility.
+        3rd round depth look with ability to answer.
+        4th round start helping others.
+    Implementation Clarity (Completeness later) - Technologies used.
+        All boiler plates and derive (readme, github low level libs, boilerplate)
+    Product Clarity (Completeness later) - Consulting.
+        have access and derive (User manuals, experience the product, derivations)
+    Architectural Clarity (Completeness later) - Designs.
+        have access and derive (Confluence, github HLV derivations)
+    All Development Runtime Clarity (Tracing, simulators, standardizations) - Implementations.
+        Set up your workstation and runtime in order to be useful.
+    <B4>
+        Sume - SRINA Components Contributions
+            Helper Tool made, Hybrid Parser.
+            RQA - ML to find locations based on power and other factors besides GIS library.
+            AD - Batch mode, changed the CLI options, ORAN through presentations of pros and cons.
+            CLA - Full e2e (refer paper)
+        Sume - SRINL CNLB Components Contributions
+            LBUtils - Bugs, Yaml formatting, Updating listeners, Running in different env, MT Service.
+            AWS - POC, CNI selection, CNLB Installation, Charts updates, Raas containerd support, IPv6 POC, Ipv6 masterability solution.
+            LBTest - Proposals, Adaptations ideations
+                Scaling, Algos, SNAT, HA, IPVS.
+            Features (indp) - IMA, EENWOG, TCM Tool UTs.
+            Innovations - Yaml Generator, Repo format updatter.
+                Solved many OOB challenges.
+        Sume - SRINX ongoing.
+    </B4>
+    <BusinessProblem>
+        Domain - Telecom.
+        Business Problem/Product - SDN
+            K8s based product with UI interface to handle all the network devices like switches and routers.
+        Global Work Divisions (ORCs)
+            SRV (frontend)
+                sdn-frontend
+                sdn-sdno-dashboard
+            SRIB (Backend Logic)
+                sdn-sdnc
+                sdn-sdno-configgen
+                sdn-sdno-oxidized
+                sdn-workflow-sdnc
+            Pol (Aggregation Smartness)
+                sdn-ztp
+                sdn-telegraf-agent, manager, sdn-twamp-manager
+            Suwon - eth else (Stats; Master; Utils like DB, kafka; quality like qos, wms; checkpointing ztbr)
+        <HighLevelPicture>
+            HLV
+                Network Applications
+                NBI
+                Control Plane - SDN Controller - Like Restaurant Manager.
+                    OPEX or Operational cost reduces - don't go to every switch.
+                SBI
+                Data Plane - Network Device - Like Cook
+                    Not dumb but following existing ruleset - no larger picture visibility.
+            Our motivation is automation not other things - ultimately 100%.
+                FCAPS but Also Functional and RPMS.
+                Addressed by Stars of SDN
+                Functional
+                    Discover the network - SDNC, SBI-Broker, Ansible
+                        Interoperability and Vendor Agnostism
+                            Seamless ops across vendors using abstractions.
+                            Controller uses vendor specific APIs.
+                            Arcus plugin should have been detected ideally so not 100% there.
+                                New router should be discovered.
+                            Working - Senthil, Ankit, etc.
+                        Topology Discovery and Management - ZTP, Auto Discovery.
+                            snapshot of network discovery - not device but network.
+                            Discover links, hierarchy, etc.
+                            If interested then explain to our team members.
+                            ZTP for auto-discovery of switches and relationship.
+                    Configuration Management - ConfigGen, ZTBR, Workflow
+                        Deploy and manage device configs across network.
+                        config templates and policy enforcement.
+                        Version control and ZTBR for rollback.
+                        No intel to automatically do it - if switch goes down then automatic rollback not manual.
+                        Working - Sanjana, Sharmishta, Tathagat.
+                Non-Functional
+                    R - Fault Detection and Recovery - SDNC-Trap, Syslog, Kube-monitor
+                        Identify and resolve to minimize downtime.
+                        Monitoring and Anomaly detection - fault isolation, recovery procedure.
+                            integration with incident management for alerts and notifications.
+                        Working - Ankit, Karthik, etc.
+                    P - Performance Monitoring and Optimization - On-demand, QoS, Flow-Monitor.
+                        Continuously Monitor Network Performance and optimize resource allocation.
+                        CPU stats not enough - sth about to go wrong - warn me or fix it.
+                        Metrics, analysis - capacity planning and resource scaling - tuning based on historical data.
+                        Working - Ankit, Karthik, Aviral.
+                    ?M - Syslog
+                    S - Security Management - WMS, License.
+                        Automated policy enforcement and threat response.
+                        IDPS Integration (Intrusion Detection and Prevention System).
+                        ZTNA implementation (Zero trust network access).
+                        Working - Aviral, Akbar.
+                Intent based Automation - Impress the operator using CLA (Closed Loop automation) - IDMA, AIPOA, Smart Suites.
+                    Translate business objectives/requirements into actionable policies, configs, optimization, healing.
+                    Like routine in our phone - Intent definition, automated deployment, feedback loop and continuous improvement.
+                    Saurabh, Manish, Sanjana, Sibam (Fabric Automation).
+                More -
+                    VCSR or HNA (Hypernetwork) - OPEX optimization, Zero Touch Deployment.
+                        FrontHaul - Network covers or radio units.
+                        Data flows from RUs to DUs - DU to vCSR switch to transfer data to CU.
+                        Core Network connection from there.
+                        Hardware vDU, CU, etc - we will deploy it all online.
+                        We want to ensure that it should be up and running.
+                        Tower is setup - someone goes there and setsup DU, CSR and starts.
+                        Make it virtual component - we will trigger it if our SDN solution.
+                        It is automation job for easy for Telecom operators - not SDN so HNA.
+                        Only Hardware - install OS, deploy VDU, CSR pods all from scratch.
+                        Communication channel needs to be secure.
+                        If trial is successful, our full team can turn into automation.
+                    Packet Mirroring.
+                Current Use cases and Opportunities
+                    Campus Networks - Simple mgmt and security in enterprise environment.
+                    5G Networks - deploy in high speed, low latency, massive connectivity requirements.
+                    AI Driven Networking - Predictive, AD, Autonomous Optimization.
+            Skillful Engineer like ChatGPT.
+                Avoid Hallucination - Data backed decisions.
+                    Should be Asking too many questions.
+                Self initiation - No application of mind.
+                Continuous Learning
+                Rejecting Sycophancy - only facts.
+                Collaboration - All together.
+                    Others should know about what you do.
+        </HighLevelPicture>
+    </BusinessProblem>
+    <Specifications>
+        <ProductDMPM>
+            SDN
+                Monitor
+                    MAC and IP Tracer - //Search
+                    Sessions - //later.
+                    Statistics
+                        Aggregated picture of CPU, Memory usage at device, pods or telemetry level, specify duration.
+                    Syslog Viewer
+                        New feature showing container logs out here in the UI - we can use regex filters for alarms.
+                    Topology Browser
+                        Developed by HQ - Map view, Physical view (logical connections), logical view (sth else)
+                Fault
+                    Alarm History
+                        Alarms raised recently.
+                    Alarm Inhibit
+                        Some alarms may not be relevant so remove them here.
+                    Alarm Severity
+                        Configure the severity level of the preconfigured alarms.
+                    Current Alarm
+                Inventory
+                    Device Inventory
+                        All switches and routers - can set thresholds for CPU, Memory, temperature, Disk for alarms.
+                        We can also enter into terminal directly - old way of configuring devices in legacy systems but gotta remember so much.
+                    UE Inventory
+                        For 3rd party enabled users like all users in SRIB campus get listed by authentication capability comes from Systems -> External Components.
+                Configuration
+                    Configuration Generator
+                        Generate as per the specification to be applied to a particular switch later - every device has a unique command given by manufacturers - that's why.
+                        Types - ZTP, Initial, Update configurations - to be applied not using REST API but a protocol maybe SNMP or NetConf - need to check.
+                    Credentials manager
+                        Credentials for authentication - discovery of devices and applying the authentication in sequence one by one like ssh does it.
+                    Device Model Profile
+                        We can create custom models for the switch not necessarily the pre-established ones - like switch device belongs to a model.
+                        Create ports and configure their design.
+                    IP Pool Configuration
+                        IP Pool to be used for DHCP later on.
+                    NOS Profile
+                        Network OS published by the vendor switches and uploaded by customer end users after their sanity check.
+                        Then we can move up or down.
+                    SNMP Profile
+                        SNMP credentials for device discovery later on - without these discovery isn't possible.
+                    Workflow History
+                        All the workflow related changes done by the user in the past.
+                    Workflow Launch
+                        All drafts saved to be launched - like VLAN configuration to be applied to switch device created as a draft - applied here.
+                    Zero Touch Backup and Restore
+                        All changes are recorded here and if we need to restore or rollback to previous version, we can.
+                    ZTP Configuration
+                        //later.
+                Security
+                    Operation History
+                        All the operations done by the user in the past.
+                    User Manager
+                        Add more users with different roles (admin, application (REST API Northbound calling), admin_application) and sections of control.
+                System
+                    External Components
+                        Capability like authentication server used as 3rd party service by most of the switches and routers to onboard new users - need creds also.
+                    Internal Components
+                        All the containers (or pods) running on the system - can configure CPU, Memory thresholds for alarms - for troubleshooting.
+                    License Manager
+                        License added with a set number of permitted users - after you exhaust it - you need to add another license.
+                Settings Menu
+                    Detailed Menu
+                    Appearance Settings
+                    User Settings
+                Dashboard - ?KPIs recording
+                    Current Device Alarm Status
+                    Device Inventory
+                    User Manager
+                    UE Inventory
+                    UE
+                    Session and IP
+                    Latest Bacup device and backup version
+                    Zero Touch Backup and restore
+                    Current Alarms
+                Status Bar
+                    Connected; Alarms details; Sound Mute OnOff (https://10.251.216.236:31110/#/fault/current-alarm)
+            HLV
+                Users
+                    License
+                    OperationHistory
+                Device (Discovery, json, ui)
+                    Alarm
+                    DeviceModel
+                ConfigurationDM
+                    Device
+                    DM
+                Workflow
+                    ConfigurationDM
+                    Device
+                    BackUpAndRestore
+                ExternalComponents
+                    UeDevices
+            HLV Consolidated
+                License
+                    User
+                        OperationHistory
+                        BackUpAndRestore
+                Workflow
+                    ConfigurationDeviceModel
+                        Device
+                            DeviceModel
+                                Alarm
+                    Device
+                    User
+                ExternalComponents
+                    UE Device
+        </ProductDMPM>
+        <FeaturesIdeation>
+            Ref - Usr Manual
+            Categories
+                Enhancement - in features
+                    important but should be considered separately.
+                    Eg - NBI (Enhancement), Syslog viewer, etc.
+                Convenience - NBI API Supports, Logs viewing from UI.
+                Security - Auth, License.
+                Better Customers ability
+                    Adaptation - understand customer behaviors better (detailed, changing, adapting or should adapt)
+                        New Device Vendors introduced.
+                        Unknown vendors support - model creation.
+                        vCSR - new vendors used by your customers - gotta adapt.
+                        QoS multi-session support - usage patterns of customer (system not aware about) - gotta align better.
+                    Design time Efficiency based Development - UT, Security, Test Automation and CICD.
+                    Runtime efficiency based devp - NetNode Optimization. Intent based Fabric automation.
+                        Background Jobs (Or Big Bang Automation) - ZTP, ZTBR.
+                Patterns inspired from ERP world
+                    History Logging - Operation History, workflow history.
+                        AI - we can use it to suggest the next action based on the sequence - thru dashboard of link to next action.
+                    Background Jobs (Or Big Bang Automation) - ZTP, ZTBR.
+                    Analytics - Stats - JCNR (network goodness), Flow Analyzer (traffic); switch statistics.
+                Misc - on demand, chores (MOM), onboarding.
+            NBI Enhancements
+            Juniper JCNR (vCSR) Monitoring
+                QoS and UX in network measured by JCNR - Jitter, Congestion, Network, Response.
+                    Jitter - Delivery Variation affects VoIP, Video Conferencing.
+                        TWAMP.
+                    Congestion - Packet drops cuz Insufficient bandwidth or resources to handle traffic loads.
+                        Netflow/IPFIX.
+                    Network (Health and Availability) - Overall health in operation and performance benchmarks - link availability, device status, throughput.
+                        SNMP.
+                    Response (Time) - RTT or round trip time so latency.
+                        TWAMP, Ping/tracert.
+                How?
+                    Data Collection - SNMP, Netflow, TWAMP.
+                        Tools - ping and tracert (time and path), TWAMP - jitter and latency
+                            Netflow/IPFIX (congestion), SNMP (NetHealth)
+                    Data Analysis - insights into JCNR.
+                    Alerts and Reporting.
+            Flow Analyzer
+                Similar but traffic metadata and identify patterns like anomalies, trends, etc.
+                Uses Netflow, sFlow, IPFIX, J-Flow, Wireshark.
+            HDN (HanDreamNet) Switch Support
+                New Switch from Company for next gen network solutions
+                switches with added security features like detecting harmful traffic like DDOS attack, ARP spoofing.
+            HFR Switch Support
+                New switches from flexiHaul series for advanced packet transport for 5G and mobile infra.
+                For high performance and precise synchronization - for low latency and high reliability.
+            NOS Management
+                Network Operation System - installation from Controller.
+            Syslog View Support (Enhancement)
+                Switch logs to be displayed on UI.
+            Switch/Router Model Creator (Enhancement)
+                Creating Hardware model and software abstractions.
+            Efficiency based Development
+                ?UTs development or other test suites.
+                Security context Issues resolution
+                Test Automation and CI/CD
+                    Github Actions for streamlined flow.
+            ZTP - ZTB and ZTR (Enhancements) - means Zero Touch Branch and Zero Touch Reconfiguration.
+                deploy and manage branch office network with minimal manual intervention.
+                    Automate network setup for remote locations.
+                Dynamically adapt network settings - automated reconfiguration of network devices.
+            UE Inventory (Enhancement)
+                Maintain record of all active user devices (smartphones, tablets, IoT) in network - IMEI, IMSI, IP, etc.
+                Helps allocate resources like bandwidth, QoS policies.
+                Facilitates auth and security policies - by identifying devices.
+                dynamic traffic steering and load balancing; integration with network slicing; handovers in mobile n/w.
+            Operation History (Enhancement)
+                Action log of user.
+            Switch Statistics (Enhancement)
+            Netnode optimization
+                Improving Performance Functionality and resource utilization of nodes in telecom network
+                Nodes like switch, router, base station, computer nodes.
+                Does following
+                    Dynamically allocate CPU, RAM, BW to meet traffic demand; don't overload specific nodes.
+                    optimize data flow paths; intelligent routing.
+                    Adjust node activity based on usage like turn off idle nodes; energy efficient hardware and algos.
+                    scale resources to handle more traffic.
+                    increase fault tolerance to reduce downtime - backups, redundant nodes.
+                    QoS - service quality by network prioritization.
+            On demand/Qos multisession support
+                ability of network system to dynamically manage n sessions per user or device while ensuring QoS.
+                Eg - Single device streaming video, handling VoIP calls, downloading files simultaneously.
+                QoS - mechanism to ensure critical sessions receive priority resources over less ones (VoIP, Video over file download).
+                On Demand - adjust resource to handle sessions as needed.
+                    Eg - new video stream starts then adjust BW allocation dynamically.
+            License (Enhance)
+            Misc
+                Unplanned Requests/Tasks from Cross ORC members
+                Standup MoM
+                Onboarding of Saurabh
+            vCSR Remote Deployment and Tunnel Automation
+                Virtual [Cisco] Cloud Services Router
+                Remote Deployment - install, configure, manage its virtualized version in remote or cloud location.
+                Offered services - routing, VPN, WAN optimization services.
+                Benefits of virtualized - cost reduction on hardware, centralized deployment and updates, scalability of resources.
+                    use onPremise for low latency; consistent performance; data sovereignty.
+                    Mitigating latency - edge computing; nearest cloud region; reduce n/w hops thru SD-WAN.
+                Tunneling - process of creating managing and monitoring secure n/w tunnels - VPNs, IPSec, GRE, MPLS.
+            Intent based Fabric Automation
+                Modern approach to managing and configuring network fabrics (logical topologies).
+                Align config and operations with high level business operation or intent.
+                IBN - Intent Based Networking - specify what like prioritize certain traffic, enforce policy - rather than how.
+                    Uses automation, ML and analytics to enforce these intents.
+                Fabric automation - deployment, configuration and mgmt of network fabrics (in data centers or policy enforcement).
+                    interconnects switches, routers and devices to provide seamless communication and policy enforcements.
+                Typically achieved virtually than physically.
+                    Eg - ring based physical topology can be programmed to behave like star topology logically by controlling how traffic flows.
+                    thru
+                        routing policies (priorities on paths)
+                        Overlay Networks - VXLAN and MPLS to create topology over fixed physical fabric.
+                        Segmentation - n/w divided in segments to enforce security and performance policies.
+                Eg - B/W optimization - transform from mesh to a star (route traffic thru central high capacity node).
+                    Failure recovery - system fails then redirect traffic dynamically - to maintain a service.
+            Security Context Issues
+            Non-Functional (Reviews and personal thinking)
+                Should be always ongoing.
+                RPMS - ordered acc
+                    Reliability
+                        ACID - Availability (Scaling - CAP), Consistent (Atomic and State), Integrity (Not mixing), Durability (Said means done)
+                    Performance - Algos, Division (Concurrency, parallelism, distributed), Caching, 3rd party optimization, Vectorization.
+                    Maintenance - DP, SD.
+                    Security - Version mgmt, Good practices.
+        </FeaturesIdeation>
+</Specifications>
+    <Design>
+        <HLV>
+        <UserLevel>
+            NBI - /v2/.... (Dummy it seems for orchestrator)
+                configuration
+                    credentials
+                    device-configurations
+                    netconf
+                    nos-profiles
+                    snmp-profiles
+                    workflow
+                        auto-discovery-and-provisioning
+                        workflows
+                    ztbr
+                    ztp
+                        addresses
+                        ippools
+                fault
+                    alarms
+                    alarm-definitions
+                global
+                    configuration
+                        credentials
+                    security
+                        monitoring
+                            sessions
+                        user
+                            access-list
+                            sessions
+                            users
+                inventory
+                    devices
+                    groups
+                    ue
+                        accountings
+                        authentications
+                        dhcps
+                        dynamic-vlan
+                        equipments
+                        users
+                        vlans
+                monitor
+                    configurations
+                    statistics
+                    topology
+                [domains/{id}/]?security
+                    user
+                        access-list
+                        sessions
+                        users
+                    monitoring
+                        sessions
+                    session
+                        twamp
+                            sessions
+                    system
+                        external-components
+                        internal-components
+                        licenses
+           frontend - react based UI.
+                No other consumer
+                Depends on (or consumes) - /api/{placeholder}/{more}.
+                    menu
+                    inventory
+                    config-generator
+                    dashboard
+                    resolution
+                    operation
+                    topology
+                    credentials
+                    group
+                    alarms
+                    setting
+                    qos
+                    switchview
+                    security
+                    snmp-configuration
+                    authenticate
+                    logout
+                    k8s-monitor
+                    license
+                    stats
+                    activemonitoring
+                    components
+                    twampmanager
+                    nos
+                    workflow
+                    tree
+                    ztp
+                    terminal
+        </UserLevel>
+        <BackendServicesThatListen>
+        Services that trigger workflows
+            Stats Levels
+                Qos
+                    //property file points out that it calls orchestrator for config and onos for eth else.
+                    qos
+                    qos/monitoring
+                    Depends on
+                        orch:
+                          rest-api-url: http://${service.orchestration.uri}
+                        onos:
+                          rest-api-url: http://${service.onos.uri}/onos
+                        mariadb
+                twamp
+                    /data
+                    /sessions
+                    depends on
+                        samsung.sdn.orch.rest-api-url=http://${service.orchestration.uri}
+                        samsung.sdn.workflow.rest-api-url=http://${service.workflow.uri}
+                        samsung.sdn.telegraf-manager.rest-api-url=http://${service.telegraf-manager.uri}
+                onDemandMonitoring also - likewise.
+                    activemonitoring
+                    Sessions, device, config, start, storage.
+                    properties file points out onos so it sits on top of onos.
+            config-generator - listening for device configs, vendors, forms, workflow, ztp templates, etc.
+                /device-configurations
+                    http://sdn-sdno-orchestration/inventory/device/ for uuid.
+                    And DB queries.
+                /fabric-template
+                /fabric-configuration/{device_ip}
+                    //uses jinja2 templates to generate.
+                /vendors/{vendor}/models/{model}/user_defined/forms
+                /user_defined/forms/export
+                /user_defined/forms/import
+                /preview-generated-content
+                /generic-configurations
+                /dynamic-configuration
+                /nbi/device-configurations
+                /nbi/getconfig
+                    SDNC_NETCONF_URL=http://sdn-workflow-sdnc:5000/configuration/netconf_cli
+                /nbi/trigger-workflow/{workflow}
+                /restoreconfiguration
+                /bulkrestoreconfiguration
+                workflow/{workflow}
+                    Get, Post --> http://sdn-sdno-workflow/workflow/launch
+                workflow-notification
+                ztp-template
+                ztp-configuration/{vendor}/{model}/{device_mode}
+                /get-template - uses orchestrator
+                Depends on: mysql db.
+            dynamicvlan
+                scheduler/deleteInfo
+                vlan/config
+                state
+                vlan/event
+                accountings
+                authentications
+                    publishEvent(AuthenticationLogReceivedEvent) --> Scheduled workflow calls.
+                logs
+                connectedUe
+            operations - history of user actions.
+                useractivity
+                userdetail
+                    read from db - written from kafka topic on operations.
+                    who wrote into that kafka topic - don't know for now.
+            operation-history
+                useractivity
+                userdetail
+                Depends on: Hibernate, Maria, Kafka.
+                    No layer dependency below.
+            ?sdno-statistics
+            ?sdno-gateway
+            ?sdno-wms
+            syslog
+                filter/devicename
+                enable
+                regex-alarm
+                search
+                settings
+                tree
+                Depends on:http://${service.orchestration.uri}, localhost:9200 (opensearch)
+            vpn-gateway (different branch)
+                vpn/component
+                    calls orchestrators, etc.
+                vpn/component/ipsec/filter/tunnel
+                vpn/component/vrouter/filter/interface
+                vpn/component/ipsec
+                vpn/component/vrouter
+                BG - Cronjob.
+                Depends on - maria, kafka, URI - orch, SBI, telemetry
+        </BackendServicesThatListen>
+        <OrchestratorAndWorkflow>
+        Orchestrator Level
+            workflow (?sdno-workflow)
+                workflow/common/enablePwd
+                workflow/event
+                workflow/launch/fabric
+                workflow/filter
+                workflow/supported
+                workflow
+                workflow/create
+                workflow/{workflowName}
+                workflow/terminate
+                workflow/update
+                workflow/history
+                workflow/monitor
+                Depends on
+                    orch:
+                      rest-api-url: http://${service.orchestration.uri}
+                    config-gen:
+                      rest-api-url: http://${service.config-gen.uri}
+                    dynamicvlan:
+                      rest-api-url: http://${service.dynamic-vlan.uri}
+                    onos:
+                      rest-api-url: http://${service.workflow-sdnc.uri}
+                      user-name: ${service.workflow-sdnc.username}
+                      password: ${service.workflow-sdnc.password}
+                    ztp:
+                      rest-api-url: http://${service.ztp.uri}
+                    Also DB: mariadb/sdnowf
+            Orchestrator
+                ....
+                Depends on: maria, kafka.
+                    sdno-topology, onos
+                    calls like sibling - stats, sdno-gateway, kube-monitor, qos-monitor, sdno-audit, sdno-external, sdn-ztp
+        </OrchestratorAndWorkflow>
+        <ControllerAndWorkflow>
+        Controller Level
+            sdnc-workflow
+                ansible/result, etc.
+                discovery/twampconfig/result, etc.
+                ztp
+                launch
+                fabric
+                initial
+                read
+                terminate
+                health
+                Depends on : rest-api-url: http://${onos.uri}/onos
+            ONOS - listening for sdn, stats, health, and v1 related endpoints.
+                dcsdn - listening to monitoring, snmp routing, stats and vrf related endpoints.
+                    activemonitoring
+                        sessions
+                        snmp/targets
+                    qosmonitoring
+                        sessions
+                        snmp/targets
+                    routing/snmp
+                        arpcounts
+                    routing/snmp
+                        dot1xports
+                        poe
+                        ptp
+                        routing
+                    statistics
+                        sensors
+                        devSysStats
+                        devTrafficStats
+                    vrf
+                        inventories
+                statistics
+                    sdncstats
+                health
+                v1
+                    nfconfig/netnodes
+                    dcsdn-rest/snmpdevices
+                    devices/
+                    linksAndPorts
+                    links
+                    network/configuration/apps/org.onosproject.nfconfig
+        </ControllerAndWorkflow>
+        <DeviceBrokers>
+        Device Brokers
+            SBI-Broker
+            ansible-server (proxy for SBI Broker)
+                autodiscovery - start
+                backup - sync
+                configuration
+                rollback - sync, create, apply.
+                twampstats
+                twampconfiguration
+                utils
+                ztpdevice
+                Depends on: Calling the ansible library to do its thing.
+        </DeviceBrokers>
+        <DesignTime>
+        CICD
+            installer - scripts to install helm from scratch with zero touch.
+                helm, install.sh, etc.
+            actions
+                Generic Reusable Workflows
+                    Manual
+                        Generic Build Custom Image - manual trigger for builds a custom tag image for any branch.
+                    PR
+                        Generic Pytest - built for python projects
+                            runs all the test cases and generates a coverage report; coverage is less than threshold (currently : 50%), workflow fails.
+                            Run on every PR.
+                        Generic Gotest - Along similar lines.
+                    Push to Main
+                        Generic Build on Push - works for **push to main** operation
+                Build Image
+                    Build Image All - builds and pushes the images
+                        for **all the projects** on **main branch** with the **custom tag** provided by user.
+                    Build Image - build and push images
+                        for any repo, any branch and any image tag, any location
+                Ready to Run
+                    Build Bundle
+                        builds bundle with the desired tag and build version
+                        //tgz file from helm.
+                    Deploy Namespace
+                        deploys into specified namespace for TB (Test bed) for input location.
+                        does not build latest images before deploying
+                    Deploy Preset Setup - deploys namespace with the already available preset setups
+                        does not build latest images before deploying
+                        //helm install using the directory and install script.
+        </DesignTime>
+<Uncat>
+            workstation - /api/radius
+            Uncat_FlowMonitor - observe track and analyze network flows.
+                N/W admin and operators monitor traffic passing for insights into performance.
+                Stats Operations
+                    @PostMapping("/top")
+                        /src
+                        /dst
+                    @GetMapping("/graph")
+                    @GetMapping("/filter/list")
+                Resources
+                    @RequestMapping("/devices")
+                        Get, Post
+                        thresholds
+                            Get, Post
+                        Actions - enable.
+                    @RequestMapping		// Alarms
+                        @GetMapping("/global")
+                        @PostMapping("/global")
+                    @PostMapping("/protocol")
+                Global Actions
+                    @PostMapping("/event")
+                        @GetMapping("/event/export")
+            Uncat_FlowSaver - Mechanism to handle and manage network flow entries in the flow tables of switch/router.
+                to optimize the entries ensuring network operates effectively.
+                @RestController("/card")
+                    GET "/top/src"
+                    /top/dst
+                    /protocol
+                /events
+                    get page of flow events
+                /graph
+                    get list of flow graphs.
+            Uncat_VCSRManagement - Virtual Cloud Service Router - Router as s/w on VM not h/w.
+                Deployed in edge, Cloud, Data centers - programmable with APIs (NETCONF, RESTCONF).
+                SDN Configures routes, policies, traffic paths.
+                v1/vcsr/licence
+                v1/vcsr/profile
+                v1/vcsr/acl
+                /v1/vcsr/cpos
+                v1/vcsr/server
+            Uncat_gateway
+                /ips
+                /ips
+                /roles
+                /sessions
+                /users
+                /frontend/logs
+                /logo
+                /notifications/receiver
+                /notifications
+                /security
+                /security/ips
+                /security/sessions
+                /security/users
+                /security/users
+                /security/ips
+                /menu
+                /internal/sessions
+                /security/sessions/configuration
+                /security/sessions
+                /tenant
+                /security/users
+                /security/users
+                /security/users
+                /security/users
+                /terminal
+            Uncat_VPNGateway
+                /vpn/component
+                /vpn/component/ipsec/filter
+                /vpn/component/vrouter/filter
+                /vpn/component/ipsec
+                /vpn/component/vrouter
+                More - all of them contain tunnel, stats, view, endpoints also.
+            Uncat_telegraf
+                ....
+            Nos-updater
+                ....
+        </Uncat>
+        More
+            pkg
+            log, utils
+                monitor - common, const
+            kafka
+            monitor
+                device
+                payload
+                service
+                wrcp
+        </HLV>
+        <DLD>
+            <Orchestrator>
+
+            </Orchestrator>
+            <Installer>
+
+            </Installer>
+            <SBI>
+            SBI Broker - TalkToDevices()
+                /health
+                    service.Health(context)            # parse request and return connection status as per configured protocol.
+                        deviceObj, errs := payload.Parse(context)
+                            requestMessage := &Payload{}
+                            context.Bind(requestMessage)
+                            device = getNetworkObject(requestMessage)
+                                if(requestMessage.Type==SNMP).then({
+                                    device = snmpclient.NewSnmp(requestMessage)
+                                }).else({
+                                    device = netconfclient.NewNcc(requestMessage)
+                                })
+                        c.JSON(http.StatusOK, handle_health_request(deviceObj))
+                            device_status := device.ConnectionCheck
+                            nc?
+                                ncc.IsConnected()?true,return: PHI;  # session cache
+                                config = netconf.SSHConfigPassword(ncc.Auth.Username, ncc.Auth.Password)
+                                DialSSHTimeout(ncc.IPAddress, strconv.Itoa(ncc.Auth.Port), config)
+                                dialer := ssh.CreateDialer(ncc.IPAddress)
+                                conn, err := dialer.Dial("tcp", host)
+                                netconfSession, err := netconf.NewSSHSession(conn, config)
+                            snmp?
+                                d.SshAuth.Connect(target=d.IPAddress)
+                                    sshClientConfig := &ssh.ClientConfig{...}
+                                    dialer := CreateDialer(target)
+                                    conn, err := dialer.Dial("tcp", {target}:{sshAuth.Port})
+                                    newConn, chann, req, err := ssh.NewClientConn(conn, host, sshClientConfig)
+                                    newClient := ssh.NewClient(newConn, chann, req)
+                                    session, err := newClient.NewSession()
+                                    return true;
+                            if(device_status==false).then(return)
+                            err := device.Connect()
+                                nc?
+                                    config := netconf.SSHConfigPassword(ncc.Auth.Username, ncc.Auth.Password)
+                                    session, err := DialSSHTimeout(ncc.IPAddress, strconv.Itoa(ncc.Auth.Port), config)
+                                snmp?
+                                    d.configureSnmp()
+                                        d.loadSnmpDriver()
+                                        d.Session.Socket = &gosnmp.GoSNMP{}
+                                        d.Session.Driver.ConnectionParam.ConfigureConnctionParams(d.Session.Socket)
+                                        d.Auth.ConfigureSNMPAuth(d.Session.Socket, d.IPAddress)
+                                    d.connectSnmpDevice()
+                            defer device.Disconnect()
+                                ncc.Session.Close()
+                            device_status, err := device.GetConnectionStatus()
+                                ncc?
+                                    ref, err := LoadPollingMethod(ncc.GetModule().DeviceAccess, ncc)
+                                        method, found := LoadHandlerFunction[*module.GetMethod()]
+                                        return method(device)
+                                            DeviceDiscovery?
+                                                rpcResult, err := ncc.GetMethodRPC(ncc.GetModule().DeviceDescription.RPC)
+                                                    rpcReply, err := ncc.Session.Exec(netconf.RawMethod(data))
+                                                    return XMLtoJson(rpcReply.Data), err
+                                                return rpcResult.sth
+                                            ...
+                                ...
+                /devicepoll
+                    service.DevicePoll
+                        go handle_request(deviceObj, false)
+                            err = device.Connect()
+                            pollingList := device.GetPollingFunctions()
+                            deviceIP := device.GetIPAddress()
+                            pollingList.forEach(pollingType=>{
+                                response.Value, err += devicePolling(device, pollingType)
+                                    DeviceAvailability?
+                                        device.GetConnectionStatus()
+                                            ref, err := LoadPollingMethod(ncc.GetModule().DeviceAccess, ncc)
+                            })
+                            return response[list]
+                        return c.JSON(http.StatusOK, map[string]bool{"status": true})
+                /bulk/devicepoll
+                    service.BulkDevicePoll
+                /devicepoll/sync
+                    service.SyncDevicePoll
+                /deviceconfig/sync
+                    service.SyncDeviceConfiguration
+                /wrcp
+                    wrcp.ServerPoll
+            </SBI>
+        </DLD>
+    </Design>
+<uncat>
+        SRINX - Ideas
+            Ideas -
+            Usage patterns so not list of all the features but features you will tend to use
+                so association rules can be very helpful.
+            Give feedback to the users or operators of the telecom.
+                //Sure
+            Selenium based UI checking instead of manual checks. But quite huge base
+                so either take it slow
+                or use NLP to automate the scripts creation and updating them later.
+            Postman scripts to validate the backend.
+            Suggest the corrections, prescriptive guides
+                not just alarms but propose actions also
+                not just what can be done but priority list of set of possible actions ready to be actuated.
+            Sort the dashboard widgets or tiles based on how much it is being used or which screens are being used the most, or first screen accessed after login
+                Widgets suggestions based on LRU, MFU, etc - can use intel here also.
+                retrieved from the user actions and plain sort will do it.
+            Meta - Proactive suggestions - weekly discussions, need based suggestions.
+                All ideas should be concretized as confluence page and PR creation and allow rework or reviews to be submitted until approved fully.
+            Auto-completion for VLAN Id - don't leave user clueless.
+                Or it can be a drop down to pick from.
+            Port down scenarios - access point switches, core switches and middle level switches.
+                Depth in the graph can be a basis to how serious the alarm is but we are already looking at the access point switches.
+                Based on traffic may not be a great idea cuz whether port up or down - the traffic won't move in both the cases and we can't tell them apart when no traffic moves.
+                    Admin based port down vs operation based port down like for the case when software makes it down vs hardware down or not plugged.
+                    unfortunately let's take his word for it that we can't tell them apart when traffic is not moving - whether it is caused by hardware issue, software planned down or just pc switched off so no traffic.
+                Based on hours as declared but that may be too generic
+                    To make it more logical, we can recognize patterns overtime by administrator manually marking the alarm to be false let's say in the midnight when it says port down but actually it's not just that PCs are off.
+                False negatives can be when alarm should have been there but did not come.
+                    Like it does not say port down cuz we acted oversmart and snubbed saying must be
+                    PCs off cuz midnight time but people either work from night 10 to 11 pm or that day students were working for the next day exam and switch port went down
+                    but you are very wrong at not taking it seriously
+                    so don't be oversmart and present probabilities to the end users and users can automate snubbing with certain probabilities.
+        SRINX - got this project after successful contributions to Airtel deployments and Vi Trials.  Congratulations
+        SRINX - SDN DMPM - FCAPS Segregated across Chapters.
+            3. Fault Management (Alarms)
+                Alarm Monitor
+                Alarm Severity
+                Alarm History
+                Alarm Inhibit
+            2. Configuration Management
+                2. Device Master data, Characteristics CRUD
+                    Device NOS Profile
+                    Device SNMP Configuration
+                    Device Credentials Manager
+                    Device Inventory
+                    Device Group
+                    Device Physical View
+                    Device Remote Terminal
+                9. Topology Browser
+                    Introduction
+                    Topology View Search & Manipulation
+                    Region Diagnosis
+                    Region Drag & Drop
+                    Adding a Link
+                    Removing a Link
+                    Map Toggle View
+                    Label Enabled View
+                    Navigating to Switch View
+                    Link Information
+                12. Config Generator
+                    Config File Creation
+                    Config file management
+                    View Configuration
+                    Copy Configuration
+                    Send to Repository
+                    Delete the Configuration File
+                    Filtration
+                    Sorting
+                    Rollback workflow
+                    Apply Rollback Operation
+                8. Workflow Management
+                    Workflow Launch
+                    Workflow History
+                    Initial Configuration Workflow
+                    Update Configuration Workflow
+                    Auto Discovery & Provision Workflow
+                    NOS Management Workflow
+                    Dynamic VLAN configuration Workflow
+                    Zero Touch Provision Workflow
+            1. Accounting - Users and License
+                User Login
+                User Logout
+                User Menu
+                License Key Addition
+                License Key Deletion
+            4. Performance Management
+                4. Stats
+                    Statistics Management
+                    Statistics Export
+                    Statistics Storage Configuration
+                Monitoring
+                    10. On-Demand Port Statistics Monitoring
+                        On-Demand Monitoring
+                    11. QoS Monitoring
+                        QoS Monitoring
+            5. Security Management
+                5. Sessions
+                    User Authentication
+                    User Management
+                    User Session
+                    IP Access Management
+                7. System Management
+                    Internal Component
+                    External Component
+                13. UE Inventory
+                    Group Management
+                    User Management
+                    UE Management
+                    VLAN Management
+                    DHCP Management
+                    Accounting Log View
+        SRINX - SDN - Repos for Architecture.
+            actions - CICD - GitHub Actions for all the needs.
+                installer
+                sdnc-workflow - SDNC Workflow
+                workflow - Workflow
+                cicd - jenkins.
+            NBI
+            UI
+                Frontend
+                dashboard
+            History
+                statistics
+                operation-history
+                audit-history
+                config-history (also in config)
+            Users
+                authorization
+                license-mgmt
+            Flow
+                flow-analyzer
+                flow-saver
+                flow-exporter
+                go-flow2
+            Utils
+                ansible-server
+                twamp-manager
+                mapserver
+                dhcp
+                http-dhcp
+                nginx, ssh server, cli
+            Uncat
+                gateway
+                vpn-gateway
+                telegraf, strongswan, workstation-mgmt
+                kube-monitor
+            Polling Exercises
+                Orchestrator
+                    Reads from ONOS traps and uses them for alarms thru some posting.
+                    Actively polls ONOS for reading the scheduled poll results and marks them as alarms.
+                ONOS - Or SDNC or Controller
+                    Schedule regular polling based on time expiry of waiting types of polling.
+                        Response of polling read from kafka topic
+                        and maintained in in-memory DB until queried by orchestrator.
+                    Receive trap from devices thru listeners over SNMP.
+                SBI Broker to connect with Devices - All polling.
+                    Protocols.
+            OS
+                controlOS - Images list at container-image.tar.gz
+                nos-server
+                nos-updator
+            Configuration Workflow
+                config-history
+                config-generator - Generating config for switch based on inputs thru REST.
+                model-inventory - Model Inventory(Deivce Model Creator) provides CRUD API of device model; validates user-defined models by getting information we need from physical device; publishes all models to kafka periodically
+            Monitoring
+                on-demand-monitoring - activemonitoring - device/getAllUuids GET, config, sessions, actuate (start/resume, pause, current state, shutdown, /{device_id}/{stat_item}), storage.
+                qos - for qos monitoring (qos monitoring CRUD; config and sessions CRUD)
+            Device Discovery
+                discovery - Network devices discovery.
+                snmp simulator - some sort of simulation for testing maybe.
+            3rd party
+                external
+                byfront-simulator
+                dynamic-vlan-mgmt - Listeners for Aircuve events for UE add/remove and addition to the vlan
+            ZTP
+                ip-manager - IP manager used for ZTP feature
+                ztp-manager - ZTP manager pod
+            ZTBR
+                oxidized - Enables to take switch config backup and restore the config for switch
+                automated-configuration-backup-restore
+            Customer specific
+                vcsr-management
+            Identify all the repos or microservices
+                for each microservice, what are i/o and external utils.
+                How do they link
+        SRINX - 2025 Goal.
+            Project task
+                Meets:
+                Deliver RPA (AI Powered Operation Agent), SBI-broker enhancements and 25B assigned features on time with minimal PLM's
+                Exceeds:
+                Ideating novel features for SDN.
+            Quality
+                Meets:
+                Meet all SR KPI's without fail even once (coverage, BT, PLM, commits, reviews, tasks etc)
+                Exceeds:
+                Come up with better ideas for quality.
+            Self-learning & Collaboration
+                Meets:
+                4 Tech talks on own in group (or) 1 prism worklet mentoring.
+                Exceeds:
+                Certification in Software architecture or related for POC effectiveness.
+        SRINX - Customers - SchoolNet, KEPCO, SDS (R3, now R5 also) and navigating into Telecom sector from now (Verizon joined).
+            SRINX - 25B from April to July but can be stretched into Aug BT also along with productizing.
+            Taewoo is more than confident.
+    </uncat>
+</SRINX>
+
